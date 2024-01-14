@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>New Tab</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div class="logo-container">
+      <img src="google_logo.svg" alt="Google Logo">
+    </div>
+    <div class="search-container">
+      <form action="https://www.google.com/search" method="GET">
+        <input type="text" name="q" placeholder="Search Google or type a URL" autofocus autocomplete="off">
+        <button type="submit">Search</button>
+      </form>
+    </div>
+    <div class="widget-container">
+      <a href="https://mail.google.com/mail/?tab=rm&authuser=0&ogbl">
+        <img src="google_logo_g.svg" alt="Gmail" class="widget-icon">
+      </a>
+      <div class="add-widget-icon" id="addWidget">
+        <img src="add_widget.svg" alt="Add Widget" class="widget-icon">
+    </div>
+    </div>
+    <script src="script_stuff.js"></script>
+  </body>
+</html>

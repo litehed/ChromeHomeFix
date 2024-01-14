@@ -1,0 +1,9 @@
+{
+    "name": "Main Page Fix",
+    "version": "1.0",
+    "manifest_version": 3,
+    "chrome_url_overrides": {
+      "newtab": "BetterNewTab.html"
+    },
+    "permissions": ["activeTab"]
+}

@@ -1,0 +1,101 @@
+html, body {
+    max-height: 100vh;
+    overflow-y: hidden;
+}
+
+body {
+    margin: 0;
+    background-image: url('theme_ntp_background.png');
+    background-position: top center;
+    background-repeat: repeat;
+    height: 100vh;
+}
+
+.logo-container {
+    margin-top: 225px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.2)); /* X-offset, Y-offset, Blur radius, Color */
+}
+
+.search-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    max-width: 680px; 
+    margin: 0 auto; 
+    filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.2));
+}
+
+.search-container form {
+    width: 100%;
+    display: flex;
+    border: 1px solid #dcdcdc; 
+    border-radius: 22px; 
+    overflow: hidden; 
+}
+
+.search-container input[type="text"],
+.search-container button {
+    border: none;
+    padding: 10px 16px;
+    margin: 0;
+    background-color: #fff; 
+    height: 46px; 
+}
+
+.search-container input[type="text"] {
+    flex-grow: 1;
+    border-radius: 0; 
+    height: 26px;
+}
+
+.search-container button {
+    background-color: #f8f8f8;
+    transition: background-color 0.2s;
+}
+ 
+.search-container button:hover {
+    background-color: #e6e6e6;
+}
+
+.search-container button:active {
+    background-color: #dcdcdc;
+}
+
+.search-container input[type="text"]:focus,
+.search-container button:focus {
+    outline: none; /* Removes the outline on focus */
+}
+
+.widget-container {
+    display: flex;
+    justify-content: center;
+    max-width: 680px; 
+    margin: 0 auto; 
+    filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.2));
+}
+
+.widget-icon {
+    width: 85px; /* or any size you prefer */
+    height: auto; /* maintain aspect ratio */
+    transition: transform 0.3s ease; /* smooth transition for click effect */
+}
+
+@keyframes clickEffect {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(0.95);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+  
+.clicked {
+    animation: clickEffect 0.3s ease;
+}
+  
