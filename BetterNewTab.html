@@ -2,12 +2,13 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>New Tab</title>
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
     <div class="logo-container">
-      <img src="google_logo.svg" alt="Google Logo">
+      <img src="resources/google_logo.svg" alt="Google Logo">
     </div>
     <div class="search-container">
       <form action="https://www.google.com/search" method="GET">
@@ -15,14 +16,19 @@
         <button type="submit">Search</button>
       </form>
     </div>
-    <div class="widget-container">
-      <a href="https://mail.google.com/mail/?tab=rm&authuser=0&ogbl">
-        <img src="google_logo_g.svg" alt="Gmail" class="widget-icon">
-      </a>
-      <div class="add-widget-icon" id="addWidget">
-        <img src="add_widget.svg" alt="Add Widget" class="widget-icon">
+    <nav class="widget-container">
+      <div class="widget">
+        <a href="https://mail.google.com/mail/?tab=rm&authuser=0&ogbl" target="_blank" rel="noopener noreferrer" class="widget-link">
+          <img src="https://www.google.com/s2/favicons?sz=64&domain_url=https://mail.google.com/mail/?tab=rm&authuser=0&ogbl" alt="Gmail" class="widget-icon">
+        </a>
+        <div class="delete-icon" style="display: none;">X</div>
+      </div>
+      <button class="add-widget-icon" id="addWidget" aria-label="Add Widget">
+        <img src="resources/add_widget.svg" alt="Add Widget" class="widget-icon">
+      </button>
+      <button id="toggleDeleteMode" class="toggle-delete-mode">Toggle Delete</button>
+    </nav>
     </div>
-    </div>
-    <script src="script_stuff.js"></script>
+    <script src="main.js"></script>
   </body>
 </html>
