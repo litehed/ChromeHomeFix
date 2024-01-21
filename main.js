@@ -1,4 +1,6 @@
-document.querySelector('.widget-container').addEventListener('click', function(event) {
+const clickDur = 300;
+
+document.querySelector('.widget-container').addEventListener('click', function (event) {
     let target = event.target;
     if (target.tagName === 'IMG' && target.parentElement.tagName === 'A') {
         target = target.parentElement;
@@ -11,12 +13,24 @@ document.querySelector('.widget-container').addEventListener('click', function(e
             widget.classList.add('clicked');
             setTimeout(() => {
                 window.location.href = widget.querySelector('a').href;
-            }, 300);
+            }, clickDur);
         }
     }
 });
 
-document.getElementById('addWidget').addEventListener('click', function() {
+document.getElementById('dropdownButton').addEventListener('click', function() {
+    this.classList.add('clicked');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+    dropdownMenu.style.display = dropdownMenu.style.display === 'none' ? 'block' : 'none';
+
+    setTimeout(() => {
+        this.classList.remove('clicked');
+    }, clickDur); 
+});
+
+
+
+document.getElementById('addNewWidget').addEventListener('click', function() {
     this.classList.add('clicked');
     setTimeout(() => {
         const url = prompt("Enter the URL for the new widget:");
@@ -24,7 +38,7 @@ document.getElementById('addWidget').addEventListener('click', function() {
             addNewWidget(url);
         }
         this.classList.remove('clicked');
-    }, 300);
+    }, clickDur);
 });
 
 function saveWidgets() {
@@ -55,7 +69,7 @@ function addNewWidget(url) {
     }
     const faviconUrl = url + '/favicon.ico';
     const widgetContainer = document.querySelector('.widget-container');
-    
+
     const widgetWrapper = document.createElement('div');
     widgetWrapper.classList.add('widget');
 
@@ -71,9 +85,10 @@ function addNewWidget(url) {
     newDeleteIcon.addEventListener('click', function (e) {
         e.stopPropagation();
         e.preventDefault();
-        widgetContainer.removeChild(widgetWrapper);
+        widgetWrapper.parentNode.removeChild(widgetWrapper);
         saveWidgets();
     });
+
 
     widgetWrapper.appendChild(newWidgetLink);
     widgetWrapper.appendChild(newDeleteIcon);
@@ -103,8 +118,12 @@ function addDeleteIcons() {
             deleteIcon.onclick = function (e) {
                 e.stopPropagation();
                 e.preventDefault();
-                widgetContainer.removeChild(widgetWrapper);
+                if (widgetWrapper && widgetWrapper.parentNode) {
+                    widgetWrapper.parentNode.removeChild(widgetWrapper);
+                    saveWidgets();
+                }
             };
+
         } else {
             if (deleteIcon) {
                 deleteIcon.style.display = 'none';
@@ -113,10 +132,11 @@ function addDeleteIcons() {
     });
 }
 
-document.getElementById('toggleDeleteMode').addEventListener('click', function () {
+document.getElementById('toggleDeleteMode').addEventListener('click', function() {
     var widgetContainer = document.querySelector('.widget-container');
     widgetContainer.classList.toggle('delete-mode');
     addDeleteIcons();
+    document.getElementById('dropdownMenu').style.display = 'none';
 });
 
 document.addEventListener('DOMContentLoaded', function () {

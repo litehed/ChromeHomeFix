@@ -99,10 +99,11 @@ body {
 }
 
 .widget-container .widget {
-    position: relative; /* for absolute positioning of delete icons */
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
+    order: 0;
 }
 
 .widget-icon {
@@ -122,17 +123,18 @@ body {
     object-fit: contain;
 }
 
-.add-widget-icon {
+.dropdown-button {
     background: none;
     border: none;
     padding: 0;
     cursor: pointer;
+    order: 1;
     /* Animate button */
     transform: scale(1);
     transition: transform 0.3s ease;
 }
 
-.add-widget-icon img {
+.dropdown-button img {
     display: block;
 }
 
@@ -147,7 +149,7 @@ body {
 }
 
 .delete-icon {
-    background-color: red;
+    background-color: rgb(249, 173, 160);
     border-radius: 50%;
     color: white;
     cursor: pointer;
@@ -157,17 +159,39 @@ body {
     min-width: 25%;
     line-height: 20px;
     position: absolute;
-    top: -10px;
-    right: -10px;
+    top: -2px;
+    right: -5px;
     text-align: center;
     box-sizing: border-box;
     padding: 0; 
     border: none;
     font-weight: bold;
+    z-index: 3;
 }
 
 .delete-mode .delete-icon {
     display: block;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    padding: 12px 16px;
+    z-index: 1;
+}
+
+.dropdown-item {
+    padding: 10px 20px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-item:hover {
+    background-color: #f1f1f1;
 }
 
 /* Animations */

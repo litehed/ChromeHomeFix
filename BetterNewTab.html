@@ -12,23 +12,29 @@
     </div>
     <div class="search-container">
       <form action="https://www.google.com/search" method="GET">
-        <input type="text" name="q" placeholder="Search Google or type a URL" autofocus autocomplete="off">
+        <input type="text" name="q" placeholder="Search Google or type a URL"
+          autofocus autocomplete="off">
         <button type="submit">Search</button>
       </form>
     </div>
     <nav class="widget-container">
       <div class="widget">
-        <a href="https://mail.google.com/mail/?tab=rm&authuser=0&ogbl" target="_blank" rel="noopener noreferrer" class="widget-link">
-          <img src="https://www.google.com/s2/favicons?sz=64&domain_url=https://mail.google.com/mail/?tab=rm&authuser=0&ogbl" alt="Gmail" class="widget-icon">
+        <a href="https://mail.google.com/mail/?tab=rm&authuser=0&ogbl"
+          target="_blank" rel="noopener noreferrer" class="widget-link">
+          <img
+            src="https://www.google.com/s2/favicons?sz=64&domain_url=https://mail.google.com/mail/?tab=rm&authuser=0&ogbl"
+            alt="Gmail" class="widget-icon">
         </a>
         <div class="delete-icon" style="display: none;">X</div>
       </div>
-      <button class="add-widget-icon" id="addWidget" aria-label="Add Widget">
-        <img src="resources/add_widget.svg" alt="Add Widget" class="widget-icon">
+      <button class="dropdown-button" id="dropdownButton" aria-label="Widget Options">
+        <img src="resources/add_widget.svg" alt="Widget Options" class="widget-icon">
       </button>
-      <button id="toggleDeleteMode" class="toggle-delete-mode">Toggle Delete</button>
+      <div id="dropdownMenu" class="dropdown-menu" style="display: none;">
+        <button id="addNewWidget" class="dropdown-item">Add</button>
+        <button id="toggleDeleteMode" class="dropdown-item">Delete</button>
+      </div>
     </nav>
-    </div>
     <script src="main.js"></script>
   </body>
 </html>
