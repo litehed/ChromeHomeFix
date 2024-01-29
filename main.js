@@ -28,8 +28,6 @@ document.getElementById('dropdownButton').addEventListener('click', function() {
     }, clickDur); 
 });
 
-
-
 document.getElementById('addNewWidget').addEventListener('click', function() {
     this.classList.add('clicked');
     setTimeout(() => {
