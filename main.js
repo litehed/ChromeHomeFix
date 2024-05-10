@@ -65,7 +65,6 @@ function addNewWidget(url) {
     if (!url.match(/^http[s]?:\/\//)) {
         url = 'https://' + url;
     }
-    const faviconUrl = url + '/favicon.ico';
     const widgetContainer = document.querySelector('.widget-container');
 
     const widgetWrapper = document.createElement('div');
@@ -74,7 +73,7 @@ function addNewWidget(url) {
     const newWidgetLink = document.createElement('a');
     newWidgetLink.href = url;
     newWidgetLink.className = 'widget-link';
-    newWidgetLink.innerHTML = `<img src="https://www.google.com/s2/favicons?sz=64&domain_url=${faviconUrl}" alt="Widget" class="widget-icon">`;
+    newWidgetLink.innerHTML = `<img src="https://www.google.com/s2/favicons?sz=64&domain_url=${encodeURIComponent(url)}" alt="Widget" class="widget-icon">`;
 
     const newDeleteIcon = document.createElement('div');
     newDeleteIcon.classList.add('delete-icon');

@@ -48,7 +48,7 @@ body {
     width: 100%;
 }
 
-.search-container input[type="text"],
+.search-container input[type="search"],
 .search-container button {
     border: none;
     height: 46px;
@@ -56,13 +56,12 @@ body {
     padding: 10px 16px;
 }
 
-.search-container input[type="text"] {
+.search-container input[type="search"] {
     border-radius: 0;
     flex-grow: 1;
-    height: 26px;
 }
 
-.search-container input[type="text"]:focus {
+.search-container input[type="search"]:focus {
     outline: none;
 }
 
@@ -115,6 +114,7 @@ body {
     background-repeat: no-repeat;
     transition: transform 0.3s ease;
     image-rendering: crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
 }
 
 .widget-icon img {
