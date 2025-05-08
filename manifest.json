@@ -1,9 +1,15 @@
 {
-    "name": "Main Page Fix",
-    "version": "1.0",
-    "manifest_version": 3,
-    "chrome_url_overrides": {
-      "newtab": "BetterNewTab.html"
-    },
-    "permissions": ["activeTab"]
+  "name": "Main Page Fix",
+  "version": "1.0",
+  "manifest_version": 3,
+  "chrome_url_overrides": {
+    "newtab": "BetterNewTab.html"
+  },
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
 }
