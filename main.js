@@ -14,14 +14,19 @@ class WidgetManager {
         this.dialog = document.getElementById('dialog');
         this.widgetForm = document.getElementById('widgetForm');
         this.cancelButton = document.getElementById('cancelButton');
+        this.actionMenu = document.getElementById('actionMenu');
+        this.editWidgetButton = document.getElementById('editWidget');
+        this.removeWidgetButton = document.getElementById('removeWidget');
 
         this.selectedTile = null;
         this.editMode = false;
 
         this.initEventListeners();
+        this.loadWidgets();
     }
 
     initEventListeners() {
+        // Widget Form Stuff
         this.addButton.addEventListener('click', () => {
             this.openDialog();
         });
@@ -39,6 +44,29 @@ class WidgetManager {
             if (e.target === this.dialog) {
                 this.closeDialog();
             }
+        });
+
+        // Action Menu Stuff
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.tile') && !e.target.closest('.action-menu')) {
+                this.closeActionMenu();
+            }
+        });
+
+        document.addEventListener('contextmenu', (e) => {
+            const tile = e.target.closest('.tile');
+            if (tile) {
+                e.preventDefault();
+                this.showActionMenuForTile(tile, e.clientX, e.clientY);
+            }
+        });
+
+        this.editWidgetButton.addEventListener('click', () => {
+            this.editCurrentWidget();
+        });
+
+        this.removeWidgetButton.addEventListener('click', () => {
+            this.removeCurrentWidget();
         });
     }
 
@@ -135,6 +163,47 @@ class WidgetManager {
         }
     }
 
+    showActionMenuForTile(tile, x, y) {
+        this.selectedTile = tile;
+
+        this.actionMenu.style.left = `${x}px`;
+        this.actionMenu.style.top = `${y}px`;
+        this.actionMenu.style.display = 'block';
+    }
+
+    closeActionMenu() {
+        this.actionMenu.style.display = 'none';
+        this.selectedTile = null;
+    }
+
+    removeCurrentWidget() {
+        if (!this.selectedTile) return;
+
+        // Fade for coolness
+        this.selectedTile.style.opacity = '0';
+        this.selectedTile.style.transform = 'scale(0.9)';
+
+        setTimeout(() => {
+            this.selectedTile.remove();
+            this.saveWidgets();
+            this.closeActionMenu();
+        }, 300);
+
+    }
+
+    editCurrentWidget() {
+        if (!this.selectedTile) return;
+
+        const widget = {
+            name: this.selectedTile.getAttribute('data-name'),
+            url: this.selectedTile.getAttribute('data-url')
+        };
+
+        this.openDialog(widget);
+        this.closeActionMenu();
+    }
+
+
     saveWidgets() {
         const widgets = [];
         const tiles = this.widgets.querySelectorAll('.tile');
@@ -147,6 +216,34 @@ class WidgetManager {
         });
 
         localStorage.setItem(CONSTANTS.STORAGE_KEY, JSON.stringify(widgets));
+    }
+
+    loadWidgets() {
+        const savedWidgets = localStorage.getItem(CONSTANTS.STORAGE_KEY);
+
+        if (savedWidgets) {
+            try {
+                const widgets = JSON.parse(savedWidgets);
+
+                widgets.forEach(widget => {
+                    this.addWidget(widget);
+                });
+            } catch (e) {
+                console.error('Error loading widgets:', e);
+            }
+        } else {
+            const defaultWidgets = [
+                { name: 'Mail', url: 'https://mail.google.com/mail/u/0/#inbox' },
+                { name: 'YouTube', url: 'https://www.youtube.com' }
+            ];
+
+            defaultWidgets.forEach(widget => {
+                this.addWidget(widget);
+            });
+
+            this.saveWidgets();
+
+        }
     }
 
 }
