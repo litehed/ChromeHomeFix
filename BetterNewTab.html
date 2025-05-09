@@ -34,7 +34,16 @@
         </div>
         <div class="form-group">
           <label for="url">URL:</label>
-          <input type="url" id="url" required placeholder="https://">
+          <div class="url-input-container">
+            <select id="protocols">
+              <option value="https://">https://</option>
+              <option value="chrome://">chrome://</option>
+              <option value="ftp://">ftp://</option>
+              <option value="mailto:">mailto:</option>
+              <option value="none">none</option>
+            </select>
+            <input type="text" id="url" required placeholder="">
+          </div>
         </div>
         <div class="button-group">
           <button type="button" id="cancelButton">Cancel</button>

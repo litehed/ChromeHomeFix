@@ -13,6 +13,7 @@ class WidgetManager {
         this.addButton = document.getElementById('addWidget');
         this.dialog = document.getElementById('dialog');
         this.widgetForm = document.getElementById('widgetForm');
+        this.protocolSelector = document.getElementById('protocols');
         this.cancelButton = document.getElementById('cancelButton');
         this.actionMenu = document.getElementById('actionMenu');
         this.editWidgetButton = document.getElementById('editWidget');
@@ -87,15 +88,17 @@ class WidgetManager {
     closeDialog() {
         this.dialog.style.display = 'none';
         this.widgetForm.reset();
+        this.editMode = false;
     }
 
     handleFormSubmit() {
         const name = document.getElementById('name').value.trim();
         let url = document.getElementById('url').value.trim();
+        const selectedProtocol = this.protocolSelector.value;
 
         // Add protocol if missing
-        if (!url.match(/^https?:\/\//i)) {
-            url = CONSTANTS.DEFAULT_PROTOCOL + url;
+        if (!url.match(/^(https?:\/\/|chrome:\/\/|ftp:\/\/|mailto:)/i) && selectedProtocol != 'none') {
+            url = selectedProtocol + url;
         }
 
         const widget = { name, url };
@@ -188,7 +191,6 @@ class WidgetManager {
             this.saveWidgets();
             this.closeActionMenu();
         }, 300);
-
     }
 
     editCurrentWidget() {
@@ -202,7 +204,6 @@ class WidgetManager {
         this.openDialog(widget);
         this.closeActionMenu();
     }
-
 
     saveWidgets() {
         const widgets = [];
@@ -242,10 +243,8 @@ class WidgetManager {
             });
 
             this.saveWidgets();
-
         }
     }
-
 }
 
 document.addEventListener('DOMContentLoaded', () => {
