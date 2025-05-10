@@ -248,7 +248,7 @@ class WidgetManager {
             }
         } else {
             const defaultWidgets = [
-                { id: this.generateUniqueId(), name: 'Mail', url: 'https://mail.google.com/mail/u/0/#inbox' },
+                { id: this.generateUniqueId(), name: 'Mail', url: 'https://mail.google.com/' },
                 { id: this.generateUniqueId(), name: 'YouTube', url: 'https://www.youtube.com' }
             ];
 
