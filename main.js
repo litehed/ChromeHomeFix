@@ -70,6 +70,14 @@ class WidgetManager {
         this.removeWidgetButton.addEventListener('click', () => {
             this.removeCurrentWidget();
         });
+
+        // Draggable Stuff
+        this.widgets.addEventListener('dragstart', (e) => {
+            const tile = e.target.closest('.tile');
+            if (tile) {
+                console.log('Dragging tile:', tile);
+            }
+        });
     }
 
     openDialog(widget = null) {
@@ -128,6 +136,8 @@ class WidgetManager {
         tile.setAttribute('data-url', widget.url);
         tile.setAttribute('data-name', widget.name);
         tile.setAttribute('data-id', widget.id);
+
+        tile.draggable = true;
 
         // Click anim
         tile.addEventListener('click', (e) => {
