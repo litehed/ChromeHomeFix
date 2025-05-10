@@ -97,7 +97,7 @@ class WidgetManager {
         const selectedProtocol = this.protocolSelector.value;
 
         // Add protocol if missing
-        if (!url.match(/^(https?:\/\/|chrome:\/\/|ftp:\/\/|mailto:)/i) && selectedProtocol != 'none') {
+        if (!url.match(/^(https?:\/\/|ftp:\/\/|mailto:)/i) && selectedProtocol != 'none') {
             url = selectedProtocol + url;
         }
 
