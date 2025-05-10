@@ -21,6 +21,7 @@ class WidgetManager {
 
         this.selectedTile = null;
         this.editMode = false;
+        this.currentWidgetId = null;
 
         this.initEventListeners();
         this.loadWidgets();
@@ -74,13 +75,14 @@ class WidgetManager {
     openDialog(widget = null) {
         if (widget) {
             this.editMode = true;
+            this.currentWidgetId = widget.id;
             document.getElementById('name').value = widget.name;
             document.getElementById('url').value = widget.url;
         } else {
             this.editMode = false;
+            this.currentWidgetId = null;
             this.widgetForm.reset();
         }
-        console.log('Dialog opened for editing:', widget);
 
         this.dialog.style.display = 'flex';
     }
@@ -89,6 +91,7 @@ class WidgetManager {
         this.dialog.style.display = 'none';
         this.widgetForm.reset();
         this.editMode = false;
+        this.currentWidgetId = null;
     }
 
     handleFormSubmit() {
@@ -102,24 +105,29 @@ class WidgetManager {
         }
 
         const widget = { name, url };
-
-        if (this.editMode && this.selectedTile) {
-            const oldUrl = this.selectedTile.getAttribute('data-url');
-            this.updateWidget(oldUrl, widget);
+        if (this.editMode && this.currentWidgetId) {
+            const widget = { id: this.currentWidgetId, name, url };
+            this.updateWidget(widget);
         } else {
-            this.addWidget(widget);
+            this.addWidget({ id: this.generateUniqueId(), name, url });
         }
 
         this.closeDialog();
         this.saveWidgets();
     }
 
+    generateUniqueId() {
+        return `widget-${crypto.randomUUID()}`;
+    }
+
     createTileElement(widget) {
+        console.log('Creating tile element for widget:', widget);
         const tile = document.createElement('a');
         tile.classList.add('tile');
         tile.href = widget.url;
         tile.setAttribute('data-url', widget.url);
         tile.setAttribute('data-name', widget.name);
+        tile.setAttribute('data-id', widget.id);
 
         // Click anim
         tile.addEventListener('click', (e) => {
@@ -150,19 +158,21 @@ class WidgetManager {
         this.widgets.insertBefore(newTile, this.addButton);
     }
 
-    updateWidget(oldUrl, newWidget) {
-        const tiles = this.widgets.querySelectorAll('.tile');
-        for (const tile of tiles) {
-            if (tile.getAttribute('data-url') === oldUrl) {
-                tile.setAttribute('data-name', newWidget.name);
-                tile.setAttribute('data-url', newWidget.url);
-                tile.href = newWidget.url;
+    updateWidget(widget) {
+        const tile = this.widgets.querySelector(`.tile[data-id="${widget.id}"]`);
 
-                tile.querySelector('.tile-name').textContent = newWidget.name;
-                tile.querySelector('.tile-icon').src =
-                    `${CONSTANTS.FAVICON_URL}?sz=${CONSTANTS.ICON_SIZE}&domain_url=${encodeURIComponent(newWidget.url)}`;
-                break;
-            }
+        if (tile) {
+            tile.setAttribute('data-name', widget.name);
+            tile.setAttribute('data-url', widget.url);
+            tile.href = widget.url;
+
+            tile.querySelector('.tile-name').textContent = widget.name;
+            tile.querySelector('.tile-icon').src =
+                `${CONSTANTS.FAVICON_URL}?sz=${CONSTANTS.ICON_SIZE}&domain_url=${encodeURIComponent(widget.url)}`;
+
+            console.log('Widget updated successfully');
+        } else {
+            console.error('Tile not found for widget ID:', widget.id);
         }
     }
 
@@ -197,6 +207,7 @@ class WidgetManager {
         if (!this.selectedTile) return;
 
         const widget = {
+            id: this.selectedTile.getAttribute('data-id'),
             name: this.selectedTile.getAttribute('data-name'),
             url: this.selectedTile.getAttribute('data-url')
         };
@@ -211,6 +222,7 @@ class WidgetManager {
 
         tiles.forEach(tile => {
             widgets.push({
+                id: tile.getAttribute('data-id'),
                 name: tile.getAttribute('data-name'),
                 url: tile.getAttribute('data-url')
             });
@@ -225,8 +237,10 @@ class WidgetManager {
         if (savedWidgets) {
             try {
                 const widgets = JSON.parse(savedWidgets);
-
                 widgets.forEach(widget => {
+                    if (!widget.id) {
+                        widget.id = this.generateUniqueId();
+                    }
                     this.addWidget(widget);
                 });
             } catch (e) {
@@ -234,8 +248,8 @@ class WidgetManager {
             }
         } else {
             const defaultWidgets = [
-                { name: 'Mail', url: 'https://mail.google.com/mail/u/0/#inbox' },
-                { name: 'YouTube', url: 'https://www.youtube.com' }
+                { id: this.generateUniqueId(), name: 'Mail', url: 'https://mail.google.com/mail/u/0/#inbox' },
+                { id: this.generateUniqueId(), name: 'YouTube', url: 'https://www.youtube.com' }
             ];
 
             defaultWidgets.forEach(widget => {
