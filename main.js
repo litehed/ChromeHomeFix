@@ -81,8 +81,13 @@ class WidgetManager {
             const tile = e.target.closest('.tile');
             if (tile) {
                 this.draggedTile = tile;
+                this.dragPlaceholder = tile.cloneNode(true);
+                this.dragPlaceholder.style.opacity = '0.4';
+                this.dragPlaceholder.style.pointerEvents = 'none';
+
                 e.dataTransfer.effectAllowed = 'move';
                 e.dataTransfer.setData('text/plain', tile.getAttribute('data-id'));
+                e.dataTransfer.setDragImage(tile, tile.offsetWidth / 2, tile.offsetHeight / 2);
 
                 setTimeout(() => {
                     tile.style.display = 'none';
@@ -105,18 +110,11 @@ class WidgetManager {
         });
 
         this.widgets.addEventListener('dragenter', (e) => {
+            e.preventDefault();
             const tile = e.target.closest('.tile');
-
             if (tile && tile !== this.draggedTile) {
-                const rect = tile.getBoundingClientRect();
-                const midpoint = rect.left + rect.width / 2;
-                const dropBefore = e.clientX < midpoint;
-
-                if (dropBefore && tile.previousSibling !== this.dragPlaceholder) {
-                    this.widgets.insertBefore(this.dragPlaceholder, tile);
-                } else if (!dropBefore && tile.nextSibling !== this.dragPlaceholder) {
-                    this.widgets.insertBefore(this.dragPlaceholder, tile.nextSibling);
-                }
+                const dropBefore = e.clientX < tile.getBoundingClientRect().left + tile.offsetWidth / 2;
+                this.widgets.insertBefore(this.dragPlaceholder, dropBefore ? tile : tile.nextSibling);
             }
         });
 
