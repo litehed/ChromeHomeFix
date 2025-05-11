@@ -24,6 +24,10 @@ class WidgetManager {
         this.currentWidgetId = null;
         this.draggedTile = null;
 
+        this.dragPlaceholder = document.createElement('div');
+        this.dragPlaceholder.style.width = '112px';
+        this.dragPlaceholder.classList.add('tile-placeholder');
+
         this.initEventListeners();
         this.loadWidgets();
     }
@@ -79,21 +83,25 @@ class WidgetManager {
                 this.draggedTile = tile;
                 e.dataTransfer.effectAllowed = 'move';
                 e.dataTransfer.setData('text/plain', tile.getAttribute('data-id'));
+
+                setTimeout(() => {
+                    tile.style.display = 'none';
+                }, 0);
             }
         });
 
         this.widgets.addEventListener('dragend', (e) => {
-            const tile = e.target.closest('.tile');
-            if (tile) {
-                this.draggedTile = null;
-                this.saveWidgets();
+            if (this.draggedTile) {
+                this.draggedTile.style.display = '';
             }
+            this.dragPlaceholder.remove();
+            this.draggedTile = null;
+            this.saveWidgets();
         });
 
         this.widgets.addEventListener('dragover', (e) => {
             e.preventDefault();
             e.dataTransfer.dropEffect = 'move';
-            return false;
         });
 
         this.widgets.addEventListener('dragenter', (e) => {
@@ -102,34 +110,24 @@ class WidgetManager {
             if (tile && tile !== this.draggedTile) {
                 const rect = tile.getBoundingClientRect();
                 const midpoint = rect.left + rect.width / 2;
+                const dropBefore = e.clientX < midpoint;
 
-                if (e.clientX < midpoint) {
-                    console.log('Drag enter before');
-                } else {
-                    console.log('Drag enter after');
+                if (dropBefore && tile.previousSibling !== this.dragPlaceholder) {
+                    this.widgets.insertBefore(this.dragPlaceholder, tile);
+                } else if (!dropBefore && tile.nextSibling !== this.dragPlaceholder) {
+                    this.widgets.insertBefore(this.dragPlaceholder, tile.nextSibling);
                 }
             }
         });
 
         this.widgets.addEventListener('drop', (e) => {
             e.preventDefault();
-            const tile = e.target.closest('.tile');
 
-            if (tile && this.draggedTile && tile !== this.draggedTile) {
-                const rect = tile.getBoundingClientRect();
-                const midpoint = rect.left + rect.width / 2;
-                const dropBefore = e.clientX < midpoint;
+            if (this.draggedTile && this.dragPlaceholder.parentElement) {
+                this.widgets.insertBefore(this.draggedTile, this.dragPlaceholder);
+                this.dragPlaceholder.remove();
 
-                if (dropBefore) {
-                    this.widgets.insertBefore(this.draggedTile, tile);
-                } else {
-                    this.widgets.insertBefore(this.draggedTile, tile.nextSibling);
-                }
-
-            }
-
-            if (e.target === this.widgets && this.draggedTile) {
-                this.widgets.insertBefore(this.draggedTile, this.addButton);
+                this.saveWidgets();
             }
         });
     }
