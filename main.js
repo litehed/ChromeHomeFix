@@ -22,6 +22,7 @@ class WidgetManager {
         this.selectedTile = null;
         this.editMode = false;
         this.currentWidgetId = null;
+        this.draggedTile = null;
 
         this.initEventListeners();
         this.loadWidgets();
@@ -75,7 +76,60 @@ class WidgetManager {
         this.widgets.addEventListener('dragstart', (e) => {
             const tile = e.target.closest('.tile');
             if (tile) {
-                console.log('Dragging tile:', tile);
+                this.draggedTile = tile;
+                e.dataTransfer.effectAllowed = 'move';
+                e.dataTransfer.setData('text/plain', tile.getAttribute('data-id'));
+            }
+        });
+
+        this.widgets.addEventListener('dragend', (e) => {
+            const tile = e.target.closest('.tile');
+            if (tile) {
+                this.draggedTile = null;
+                this.saveWidgets();
+            }
+        });
+
+        this.widgets.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            return false;
+        });
+
+        this.widgets.addEventListener('dragenter', (e) => {
+            const tile = e.target.closest('.tile');
+
+            if (tile && tile !== this.draggedTile) {
+                const rect = tile.getBoundingClientRect();
+                const midpoint = rect.left + rect.width / 2;
+
+                if (e.clientX < midpoint) {
+                    console.log('Drag enter before');
+                } else {
+                    console.log('Drag enter after');
+                }
+            }
+        });
+
+        this.widgets.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const tile = e.target.closest('.tile');
+
+            if (tile && this.draggedTile && tile !== this.draggedTile) {
+                const rect = tile.getBoundingClientRect();
+                const midpoint = rect.left + rect.width / 2;
+                const dropBefore = e.clientX < midpoint;
+
+                if (dropBefore) {
+                    this.widgets.insertBefore(this.draggedTile, tile);
+                } else {
+                    this.widgets.insertBefore(this.draggedTile, tile.nextSibling);
+                }
+
+            }
+
+            if (e.target === this.widgets && this.draggedTile) {
+                this.widgets.insertBefore(this.draggedTile, this.addButton);
             }
         });
     }
@@ -112,7 +166,6 @@ class WidgetManager {
             url = selectedProtocol + url;
         }
 
-        const widget = { name, url };
         if (this.editMode && this.currentWidgetId) {
             const widget = { id: this.currentWidgetId, name, url };
             this.updateWidget(widget);
